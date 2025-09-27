@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel转置处理工具 - 预览页面</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 2rem auto;
+            padding: 2rem;
+            max-width: 800px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area:hover {
+            border-color: #2980b9;
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+        
+        .upload-area.dragover {
+            border-color: #27ae60;
+            background: #e8f5e8;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-hint {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .btn-upload {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-upload:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .progress-container {
+            margin: 2rem 0;
+            display: none;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background: #ecf0f1;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .result-container {
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            border-left: 5px solid #27ae60;
+        }
+        
+        .result-title {
+            color: #27ae60;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .btn-download {
+            background: linear-gradient(45deg, #27ae60, #229954);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin: 1rem 0;
+        }
+        
+        .alert-success {
+            background: linear-gradient(45deg, #d4edda, #c3e6cb);
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(45deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+        }
+        
+        .feature-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            color: #2c3e50;
+        }
+        
+        .feature-icon {
+            color: #3498db;
+            margin-right: 0.8rem;
+            width: 20px;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .spinner-border {
+            color: #3498db;
+        }
+        
+        .preview-demo {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .preview-demo h4 {
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-demo p {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-demo .btn {
+            margin: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+            
+            .result-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container">
+            <div class="header">
+                <h1><i class="fas fa-table"></i> Excel转置处理工具</h1>
+                <p>支持上传Excel文件，按照要求转置表格，处理完后可以下载</p>
+            </div>
+            
+            <div class="preview-demo">
+                <h4><i class="fas fa-eye"></i> 预览演示</h4>
+                <p>这是Excel转置处理工具的前端页面预览。实际功能需要启动Flask服务器。</p>
+                <a href="http://localhost:8080" class="btn btn-success" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> 访问实际应用
+                </a>
+                <button class="btn btn-info" onclick="showDemo()">
+                    <i class="fas fa-play"></i> 演示功能
+                </button>
+            </div>
+            
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">点击选择文件或拖拽文件到此处</div>
+                <div class="upload-hint">支持 .xlsx 和 .xls 格式</div>
+                <input type="file" id="fileInput" class="file-input" accept=".xlsx,.xls">
+            </div>
+            
+            <div class="text-center">
+                <button class="btn btn-upload" id="uploadBtn" disabled>
+                    <i class="fas fa-upload"></i> 开始转置处理
+                </button>
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                </div>
+                <div class="text-center mt-2">
+                    <small class="text-muted">正在处理中，请稍候...</small>
+                </div>
+            </div>
+            
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="mt-2">
+                    <small class="text-muted">正在转置处理中...</small>
+                </div>
+            </div>
+            
+            <div class="result-container" id="resultContainer">
+                <div class="result-card">
+                    <div class="result-title">
+                        <i class="fas fa-check-circle"></i> 转置处理完成
+                    </div>
+                    <div class="result-stats" id="resultStats">
+                        <!-- 统计信息将在这里显示 -->
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-download" id="downloadBtn">
+                            <i class="fas fa-download"></i> 下载转置后的文件
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-list">
+                <h5><i class="fas fa-star"></i> 功能特点</h5>
+                <div class="feature-item">
+                    <i class="fas fa-check feature-icon"></i>
+                    <span>支持信源数据分析和关键词数据分析工作表转置</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check feature-icon"></i>
+                    <span>将品牌从列标题转换为数据列</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check feature-icon"></i>
+                    <span>保持所有工作表数量一致</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check feature-icon"></i>
+                    <span>只保留有数据的行，优化数据质量</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check feature-icon"></i>
+                    <span>支持拖拽上传，操作简便</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        class ExcelTransposePreview {
+            constructor() {
+                this.uploadArea = document.getElementById('uploadArea');
+                this.fileInput = document.getElementById('fileInput');
+                this.uploadBtn = document.getElementById('uploadBtn');
+                this.progressContainer = document.getElementById('progressContainer');
+                this.progressBar = document.getElementById('progressBar');
+                this.loadingSpinner = document.getElementById('loadingSpinner');
+                this.resultContainer = document.getElementById('resultContainer');
+                this.resultStats = document.getElementById('resultStats');
+                this.downloadBtn = document.getElementById('downloadBtn');
+                
+                this.initEventListeners();
+            }
+            
+            initEventListeners() {
+                // 点击上传区域
+                this.uploadArea.addEventListener('click', () => {
+                    this.fileInput.click();
+                });
+                
+                // 文件选择
+                this.fileInput.addEventListener('change', (e) => {
+                    this.handleFileSelect(e.target.files[0]);
+                });
+                
+                // 拖拽事件
+                this.uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.add('dragover');
+                });
+                
+                this.uploadArea.addEventListener('dragleave', () => {
+                    this.uploadArea.classList.remove('dragover');
+                });
+                
+                this.uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.remove('dragover');
+                    this.handleFileSelect(e.dataTransfer.files[0]);
+                });
+                
+                // 上传按钮
+                this.uploadBtn.addEventListener('click', () => {
+                    this.showAlert('这是预览页面，实际功能需要启动Flask服务器', 'info');
+                });
+                
+                // 下载按钮
+                this.downloadBtn.addEventListener('click', () => {
+                    this.showAlert('这是预览页面，实际功能需要启动Flask服务器', 'info');
+                });
+            }
+            
+            handleFileSelect(file) {
+                if (!file) return;
+                
+                // 检查文件类型
+                const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+                                    'application/vnd.ms-excel'];
+                if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls)$/i)) {
+                    this.showAlert('请选择Excel文件（.xlsx或.xls格式）', 'danger');
+                    return;
+                }
+                
+                this.uploadBtn.disabled = false;
+                
+                // 更新上传区域显示
+                this.uploadArea.innerHTML = `
+                    <div class="upload-icon">
+                        <i class="fas fa-file-excel" style="color: #27ae60;"></i>
+                    </div>
+                    <div class="upload-text">已选择文件: ${file.name}</div>
+                    <div class="upload-hint">文件大小: ${this.formatFileSize(file.size)}</div>
+                `;
+                
+                this.hideAlert();
+            }
+            
+            showAlert(message, type) {
+                // 移除现有警告
+                this.hideAlert();
+                
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type} alert-dismissible fade show`;
+                alert.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                this.uploadArea.parentNode.insertBefore(alert, this.uploadArea);
+            }
+            
+            hideAlert() {
+                const existingAlert = document.querySelector('.alert');
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+            }
+            
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        }
+        
+        // 演示功能
+        function showDemo() {
+            const preview = new ExcelTransposePreview();
+            
+            // 模拟文件选择
+            const mockFile = {
+                name: '示例文件.xlsx',
+                size: 1024000
+            };
+            
+            preview.handleFileSelect(mockFile);
+            
+            // 模拟处理过程
+            setTimeout(() => {
+                preview.showProgress();
+            }, 1000);
+            
+            setTimeout(() => {
+                preview.hideProgress();
+                preview.showResult({
+                    '信源数据分析': [1609, 8],
+                    '关键词数据分析': [1097, 12]
+                });
+                preview.showAlert('演示完成！实际功能需要启动Flask服务器', 'success');
+            }, 3000);
+        }
+        
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            new ExcelTransposePreview();
+        });
+    </script>
+</body>
+</html>

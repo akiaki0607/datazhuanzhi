@@ -1,0 +1,81 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Flask
+instance/
+.webassets-cache
+
+# Uploads and Outputs
+uploads/*
+!uploads/.gitkeep
+outputs/*
+!outputs/.gitkeep
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Excel files (keep only test files)
+*.xlsx
+*.xls
+!test_*.xlsx
+!test_*.xls
+
+# Test reports
+*_测试报告_*.md
+*_转置测试报告_*.md
+*_完整转置测试报告_*.md
+*_副本转置测试报告_*.md
+*_关键词转置测试报告_*.md
+*_信源转置测试报告_*.md
+*_最终测试报告_*.md
+*_完整转置测试报告_*.md
+*_预览页面说明.md
+*_前端页面使用说明.md
+*_完整功能测试报告.md
