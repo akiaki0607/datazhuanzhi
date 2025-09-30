@@ -510,6 +510,75 @@
 
 ---
 
+### 2025年1月30日 - 添加内网穿透部署方案
+
+#### 会话的主要目的
+为Excel转置处理工具添加内网穿透部署方案，使本地服务能够通过公网访问，方便与他人分享和使用。
+
+#### 完成的主要任务
+1. 创建了ngrok启动脚本 (start_ngrok.sh)
+2. 创建了Cloudflare Tunnel启动脚本 (start_cloudflare.sh)
+3. 配置了frp客户端配置文件 (frpc.ini)
+4. 编写了详细的部署说明文档 (部署说明.md)
+5. 提供了三种内网穿透解决方案
+
+#### 关键决策和解决方式
+- 推荐使用ngrok作为最简单的内网穿透方案
+- 提供Cloudflare Tunnel作为免费稳定的替代方案
+- 保留frp配置作为自建服务器的高级选项
+- 创建一键启动脚本，简化部署流程
+- 编写详细的故障排除指南
+
+#### 使用的技术栈
+- ngrok (内网穿透服务)
+- Cloudflare Tunnel (免费内网穿透)
+- frp (Fast Reverse Proxy)
+- Shell脚本自动化
+- 部署文档编写
+
+#### 修改了哪些文件
+- 创建了新文件：start_ngrok.sh (ngrok启动脚本)
+- 创建了新文件：start_cloudflare.sh (Cloudflare Tunnel启动脚本)
+- 创建了新文件：frpc.ini (frp客户端配置)
+- 创建了新文件：部署说明.md (详细部署文档)
+- 更新了README.md文件
+
+#### 修改的时间
+2025年1月30日
+
+#### 部署方案详情
+1. **ngrok方案（推荐）**：
+   - 最简单易用
+   - 免费版支持基本功能
+   - 一键启动脚本
+   - 自动获取公网地址
+
+2. **Cloudflare Tunnel方案**：
+   - 完全免费
+   - 相对稳定
+   - 需要Cloudflare账号
+   - 支持自定义域名
+
+3. **frp方案**：
+   - 需要自己的服务器
+   - 完全可控
+   - 适合长期使用
+   - 配置相对复杂
+
+#### 快速部署步骤
+1. 注册ngrok账号并获取authtoken
+2. 运行 `./ngrok authtoken YOUR_AUTHTOKEN`
+3. 执行 `./start_ngrok.sh`
+4. 获取ngrok提供的公网地址
+5. 分享地址给其他人访问
+
+#### 访问方式
+- **本地访问**: http://localhost:8080
+- **公网访问**: 通过ngrok/cloudflare tunnel提供的地址
+- **示例地址**: https://abc123.ngrok.io
+
+---
+
 ### 2025年1月30日 - 思迈特报表转置处理
 
 #### 会话的主要目的
